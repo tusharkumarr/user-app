@@ -15,6 +15,7 @@ const UserForm = ({
     phone: "",
     email: "",
   });
+  const [errors, setErrors] = useState<any>({});
 
   useEffect(() => {
     if (defaultValues) {
@@ -27,6 +28,7 @@ const UserForm = ({
         email: "",
       });
     }
+    setErrors({});
   }, [defaultValues]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,24 @@ const UserForm = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validate()) return;
     onSubmit(formData);
+  };
+  const validate = () => {
+    const newErrors: any = {};
+
+    // Email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Phone validation (10 digits)
+    if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Phone number must be 10 digits";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   return (
@@ -52,6 +71,11 @@ const UserForm = ({
             placeholder={field.label}
             required={field.required}
           />
+          {errors[field.name] && (
+            <p style={{ color: "red", margin: "4px 0" }}>
+              {errors[field.name]}
+            </p>
+          )}
         </div>
       ))}
 

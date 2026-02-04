@@ -1,73 +1,106 @@
-# React + TypeScript + Vite
+# User Management – React CRUD Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This is a simple **React + TypeScript CRUD (Create, Read, Update, Delete)** application for managing user data.  
+The application is designed with **future extensibility in mind**, allowing new fields to be added with **minimal code changes** using a **schema-driven form architecture**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Create, Read, Update, Delete users
+- User form with validation and required field enforcement
+- Schema-based, configuration-driven form rendering
+- Clean and user-friendly UI
+- Responsive layout (form and list displayed side-by-side on desktop)
+- Written in TypeScript for better type safety
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React  
+- TypeScript  
+- Vite  
+- Plain CSS (Flexbox layout)  
+- Mock API (in-memory / stubbed API layer)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## User Fields
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The application currently supports the following user fields:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- First Name  
+- Last Name  
+- Phone Number  
+- Email Address  
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Validation Rules
+
+- All fields are required  
+- Email must be in valid email format  
+- Phone number must contain exactly 10 digits  
+
+---
+
+## Project Structure
+
+src/
+├── api/ # API abstraction (mock / stub)
+├── components/ # Reusable UI components
+├── schemas/ # Form schema configuration
+├── types/ # TypeScript interfaces
+├── App.tsx
+└── App.css
+
+
+---
+
+## Extensibility (Key Design Decision)
+
+The user form is rendered dynamically using a **schema configuration**.
+
+### Schema File
+
+`src/schemas/userFormSchema.ts`
+
+```ts
+export const userFormSchema = [
+  { name: "firstName", label: "First Name", type: "text", required: true },
+  { name: "lastName", label: "Last Name", type: "text", required: true },
+  { name: "phone", label: "Phone Number", type: "number", required: true },
+  { name: "email", label: "Email Address", type: "email", required: true }
+];
+Adding a New Field
+To add a new field (e.g. Address or Date of Birth):
+
+Add a new entry to userFormSchema.ts
+
+Setup Instructions
+Prerequisites
+Node.js (v18 or later recommended)
+
+npm or yarn
+
+Install & Run
+npm install
+npm run dev
+The application will be available at:
+
+http://localhost:5173
+API Handling
+The app uses a mock API layer to simulate CRUD operations.
+
+API functions remain asynchronous to allow easy replacement with a real backend or JSON-server without impacting UI code.
+
+
+A mock API is used since API details were not provided.
+
+Deployment
+Live Application:
+https://user-app-crud1.netlify.app/
+
+GitHub Repository
+https://github.com/tusharkumarr/user-app

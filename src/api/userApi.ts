@@ -20,4 +20,17 @@ export const createUser = async (data: User): Promise<User> => {
   return newUser;
 };
 
+export const updateUser = async (
+  id: string,
+  data: User
+): Promise<User> => {
+  users = users.map(user =>
+    user.id === id ? { ...data, id } : user
+  );
+  return { ...data, id };
+};
+
+export const deleteUser = async (id: string): Promise<void> => {
+  users = users.filter(user => user.id !== id);
+};
 

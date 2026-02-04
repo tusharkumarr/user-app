@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const UserForm =({ onSubmit }: { onSubmit: (data: any) => void }) => {
+const UserForm =({ onSubmit, defaultValues }: { onSubmit: (data: any) => void, defaultValues?: any }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     phone: '',
     email: '',
   });
-
+  useEffect(() => {
+    if (!defaultValues) {
+    setFormData({
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+    });
+    }
+    if (defaultValues) {
+      setFormData(defaultValues);
+    }
+  }, [defaultValues]);
   const handleChange = (e:any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

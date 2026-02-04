@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import type { User } from "./types/user";
 import UserForm from "./components/userForm";
-import { createUser, getUsers } from "./api/userApi";
+import { createUser, deleteUser, getUsers, updateUser } from "./api/userApi";
+import UserList from "./components/userList";
 
 
 function App() {
@@ -18,13 +19,17 @@ function App() {
   }, []);
 
   const handleSubmit = async (data: User) => {
-    let res = await getUsers();
-    console.log(res);
     if (editingUser?.id) {
+      await updateUser(editingUser.id, data);
       setEditingUser(null);
     } else {
-      createUser(data);
+      await createUser(data);
     }
+    loadUsers();
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteUser(id);
     loadUsers();
   };
 
@@ -34,8 +39,14 @@ function App() {
 
       <UserForm
         onSubmit={handleSubmit}
+        defaultValues={editingUser || undefined}
       />
 
+      <UserList
+        users={users}
+        onEdit={setEditingUser}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

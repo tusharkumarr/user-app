@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { userFormSchema } from "../schemas/userFormSchema";
 import type { User } from "../types/user";
+import "./UserForm.css";
 
 const UserForm = ({
   onSubmit,
@@ -36,32 +37,28 @@ const UserForm = ({
     setFormData((prev: User) => ({ ...prev, [name]: value }));
   };
 
+  const validate = () => {
+    const newErrors: any = {};
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Phone number must be 10 digits";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
     onSubmit(formData);
   };
-  const validate = () => {
-    const newErrors: any = {};
-
-    // Email validation
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    // Phone validation (10 digits)
-    if (!/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone = "Phone number must be 10 digits";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="user-form">
       {userFormSchema.map(field => (
-        <div key={field.name} style={{ marginBottom: "10px" }}>
+        <div key={field.name} className="form-row">
           <label>{field.label}</label>
           <input
             type={field.type}
@@ -72,14 +69,12 @@ const UserForm = ({
             required={field.required}
           />
           {errors[field.name] && (
-            <p style={{ color: "red", margin: "4px 0" }}>
-              {errors[field.name]}
-            </p>
+            <span className="error">{errors[field.name]}</span>
           )}
         </div>
       ))}
 
-      <button type="submit">
+      <button type="submit" className="submit-btn">
         {defaultValues ? "Update User" : "Create User"}
       </button>
     </form>
